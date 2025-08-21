@@ -56,7 +56,7 @@ class InvoicePDF extends FPDF
     function Header()
     {
         // ACPK Header Bar
-        $this->SetFont('Arial', 'B', 24);
+        $this->SetFont('Arial', 'B', 12);
         $this->SetTextColor(255, 255, 255);
         $this->SetFillColor(165, 42, 42); // Brown Header
         $this->Rect(0, 0, 210, 30, 'F');
@@ -64,15 +64,15 @@ class InvoicePDF extends FPDF
 
         // Invoice Title
         $this->SetY(40);
-        $this->SetFont('Arial', 'B', 20);
+        $this->SetFont('Arial', 'B', 15);
         $this->SetTextColor(26, 58, 143);
-        $this->Cell(0, 10, $this->title, 0, 1, 'C');
+        $this->Cell(95, 10, $this->title, 0, 0, 'R');
 
         // Invoice Info
         $this->SetFont('Arial', '', 12);
         $this->SetTextColor(0, 0, 0);
         $this->Cell(0, 8, 'Invoice No: ' . $this->invoiceNo, 0, 1, 'C');
-        $this->Cell(0, 8, 'Date: ' . $this->date, 0, 1, 'C');
+        $this->Cell(95, 10, 'Date: ' . $this->date, 0, 1, 'L');
 
         $this->Ln(5);
     }
@@ -95,7 +95,7 @@ class InvoicePDF extends FPDF
     {
         // Draw rounded box
         $this->SetDrawColor(0, 0, 0);
-        $this->RoundedRect(10, 70, 190, 75, 5, '');
+        $this->RoundedRect(10, 70, 170, 75, 5, '');
 
         $this->SetXY(15, 75);
         $this->SetFont('Arial', 'B', 12);
@@ -141,32 +141,38 @@ class InvoicePDF extends FPDF
 
     function addInvoiceTable()
     {
+        // Use same width as address box = 170mm
+        $descWidth = 90;
+        $unitWidth = 40;
+        $amountWidth = 40;
+
         // Header
-        $this->SetFillColor(165, 42, 42);
+        $this->SetFillColor(165, 42, 42); // brown
         $this->SetTextColor(255, 255, 255);
         $this->SetFont('Arial', 'B', 12);
-        $this->Cell(110, 10, 'DESCRIPTION', 1, 0, 'C', true);
-        $this->Cell(40, 10, 'UNIT', 1, 0, 'C', true);
-        $this->Cell(40, 10, 'AMOUNT', 1, 1, 'C', true);
+        $this->Cell($descWidth, 10, 'DESCRIPTION', 1, 0, 'C', true);
+        $this->Cell($unitWidth, 10, 'UNIT', 1, 0, 'C', true);
+        $this->Cell($amountWidth, 10, 'AMOUNT', 1, 1, 'C', true);
 
         // Rows
         $this->SetTextColor(0, 0, 0);
         $this->SetFont('Arial', '', 11);
-        $this->Cell(110, 10, 'Professional membership', 1, 0);
-        $this->Cell(40, 10, 'KES 3,500/-', 1, 0, 'R');
-        $this->Cell(40, 10, 'KES 3,500', 1, 1, 'R');
+        $this->Cell($descWidth, 10, 'Professional membership', 1, 0);
+        $this->Cell($unitWidth, 10, 'KES 3,500/-', 1, 0, 'R');
+        $this->Cell($amountWidth, 10, 'KES 3,500', 1, 1, 'R');
 
-        $this->Cell(110, 10, 'First Registration', 1, 0);
-        $this->Cell(40, 10, 'KES 1,000', 1, 0, 'R');
-        $this->Cell(40, 10, 'KES 1,000', 1, 1, 'R');
+        $this->Cell($descWidth, 10, 'First Registration', 1, 0);
+        $this->Cell($unitWidth, 10, 'KES 1,000', 1, 0, 'R');
+        $this->Cell($amountWidth, 10, 'KES 1,000', 1, 1, 'R');
 
         // Total
         $this->SetFont('Arial', 'B', 12);
-        $this->Cell(150, 10, 'TOTAL', 1, 0, 'R');
-        $this->Cell(40, 10, 'KES 4,500', 1, 1, 'R');
+        $this->Cell($descWidth + $unitWidth, 10, 'TOTAL', 1, 0, 'R');
+        $this->Cell($amountWidth, 10, 'KES 4,500', 1, 1, 'R');
 
         $this->Ln(15);
     }
+
 
     function addPaymentInfo()
     {
